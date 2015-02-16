@@ -155,6 +155,20 @@ median(x4a$total_steps, na.rm =T)
 
 ```{r, echo=TRUE}
 
+activity3 <- activity2
+activity3$date <- as.POSIXct(activity3$date, tz = "GMT")
+weekdays_1 <- activity3[!(weekdays(activity3$date) %in% c('Saturday','Sunday')), ]
+weekends_1 <- activity3[(weekdays(activity3$date) %in% c('Saturday','Sunday')), ]
+
+weekdays_agg <- aggregate(weekdays_1$steps, by=list(weekdays_1$interval), mean, na.rm =T)
+colnames(weekdays_agg) <- c("interval", "mean_steps")
+
+plot(weekdays_agg$interval, x3a$mean_steps, type = "l", xlab = "Interval (5-min duration)", ylab = "mean # of steps", main = "Weekday mean # steps")
+
+weekends_agg <- aggregate(weekends_1$steps, by=list(weekends_1$interval), mean, na.rm =T)
+colnames(weekends_agg) <- c("interval", "mean_steps")
+
+plot(weekends_agg$interval, x3a$mean_steps, type = "l", xlab = "Interval (5-min duration)", ylab = "mean # of steps", main = "Weekend mean # steps")
 ```
 
 
