@@ -1,11 +1,10 @@
----
 #title: "Reproducible Research: Peer Assessment 1"  
 ##author: "William Michels"  
-##date: "February 15, 2015"  
+##date: "March 7, 2015"  
 output:   
   html_document:  
-    keep_md: true  
-----  
+  keep_md: true  
+------ 
   
 ## Loading and preprocessing the data 
 
@@ -246,7 +245,7 @@ mean(x4a$total_steps, na.rm =T)
 ```
 
 ```
-## [1] 10610.7
+## [1] 10742.89
 ```
 
 ```r
@@ -254,7 +253,7 @@ median(x4a$total_steps, na.rm =T)
 ```
 
 ```
-## [1] 10571
+## [1] 10600
 ```
 
 4a.   Q. Do these values differ from the estimates from the first part of the assignment? *Yes, the random imputation method of Gelman results in imputed data having a mean/median approximately 100 steps lower than non-imputed data.*
@@ -294,5 +293,5 @@ mtext("5-minute Interval", line= 2, side = 1, cex = 0.9)
 par(oldPar)
 ```
 
-*Yes, the weekday graph indicates a peak between interval #800-900, with much less activity during the rest of the day, while the weekend graph indicates steps are taken much more evenly throughout the day, and even at night.*
+*Yes, the weekday graph indicates a peak between interval #800-900 (i.e. between 8am and 9am), with much less activity during the rest of the day. The weekend graph indicates steps are taken much more evenly throughout the day, and even at night.*
 ######
