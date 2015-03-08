@@ -1,12 +1,12 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-author: "William Michels"
-date: "February 15, 2015"
-output: 
-  html_document:
-    keep_md: true
-----
-
+#title: "Reproducible Research: Peer Assessment 1"  
+##author: "William Michels"  
+##date: "February 15, 2015"  
+output:   
+  html_document:  
+    keep_md: true  
+----  
+  
 ## Loading and preprocessing the data 
 
 1.    Load the data (i.e. `read.csv()`)
@@ -218,7 +218,7 @@ return (imputed)
 
 ```r
 activity2 <- activity
-activity2$steps <- random.imp(activity$steps)
+activity2$steps <- random.imp(activity2$steps)
 table(is.na(activity2))
 ```
 
@@ -232,8 +232,10 @@ table(is.na(activity2))
 
 
 ```r
-x4a <- aggregate(activity$steps, by=list(activity$date), sum)
+x4a <- aggregate(activity2$steps, by=list(activity2$date), sum)
+
 colnames(x4a) <- c("date", "total_steps")
+
 hist(x4a$total_steps, freq=T, breaks = "Freedman-Diaconis", col = 2, xlab = "total steps per day", main = "Histogram of total steps-per-day:\nNAs replaced via random-imputation method of Gelman")
 ```
 
@@ -244,7 +246,7 @@ mean(x4a$total_steps, na.rm =T)
 ```
 
 ```
-## [1] 10766.19
+## [1] 10610.7
 ```
 
 ```r
@@ -252,22 +254,23 @@ median(x4a$total_steps, na.rm =T)
 ```
 
 ```
-## [1] 10765
+## [1] 10571
 ```
 
-4a.   Q. Do these values differ from the estimates from the first part of the assignment? *No, the random imputation method of Gelman results in data with/without NAs having the same mean/median.*
+4a.   Q. Do these values differ from the estimates from the first part of the assignment? *Yes, the random imputation method of Gelman results in imputed data having a mean/median approximately 100 steps lower than non-imputed data.*
 
-4b.   Q. What is the impact of imputing missing data on the estimates of the total daily number of steps? *Graphically there is no apparent change. The plots look identical.*
-
-
-
+4b.   Q. What is the impact of imputing missing data on the estimates of the total daily number of steps? *Graphically there is modest change, with the major peak (centering at approx. 10,000 to 12,000 steps per day) getting higher, consistent with an overall increase in the number of values after imputing NAs.*
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
 
-
-
 ```r
+oldPar <- par(no.readonly=TRUE)
+xpd = TRUE
+par(mar = c(3,4,1,1))
+par(oma = c(0,0,0,0))
+par(mfrow=c(2,1))
+
 activity3 <- activity2
 activity3$date <- as.POSIXct(activity3$date, tz = "GMT")
 weekdays_1 <- activity3[!(weekdays(activity3$date) %in% c('Saturday','Sunday')), ]
@@ -276,20 +279,20 @@ weekends_1 <- activity3[(weekdays(activity3$date) %in% c('Saturday','Sunday')), 
 weekdays_agg <- aggregate(weekdays_1$steps, by=list(weekdays_1$interval), mean, na.rm =T)
 colnames(weekdays_agg) <- c("interval", "mean_steps")
 
-plot(weekdays_agg$interval, x3a$mean_steps, type = "l", xlab = "Interval (5-min duration)", ylab = "mean # of steps", main = "Weekday mean # steps")
+weekends_agg <- aggregate(weekends_1$steps, by=list(weekends_1$interval), mean, na.rm =T)
+colnames(weekends_agg) <- c("interval", "mean_steps")
+
+plot(weekdays_agg$interval, weekdays_agg$mean_steps, type = "l", cex.main = 0.9, cex.axis = 0.6, cex.lab = 0.8, xlab= "", ylab = "mean steps", main = "Weekday")
+
+plot(weekends_agg$interval, weekends_agg$mean_steps, type = "l", cex.main = 0.9, cex.axis = 0.6, cex.lab = 0.8, ylab = "mean steps", main = "Weekend")
+mtext("5-minute Interval", line= 2, side = 1, cex = 0.9)
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
 ```r
-weekends_agg <- aggregate(weekends_1$steps, by=list(weekends_1$interval), mean, na.rm =T)
-colnames(weekends_agg) <- c("interval", "mean_steps")
-
-plot(weekends_agg$interval, x3a$mean_steps, type = "l", xlab = "Interval (5-min duration)", ylab = "mean # of steps", main = "Weekend mean # steps")
+par(oldPar)
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-2.png) 
-
-
-
+*Yes, the weekday graph indicates a peak between interval #800-900, with much less activity during the rest of the day, while the weekend graph indicates steps are taken much more evenly throughout the day, and even at night.*
 ######
